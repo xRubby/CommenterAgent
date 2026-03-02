@@ -35,7 +35,21 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "viewsContainers": {
+    "activitybar": [{
+        "id": "ai-commenter-sidebar",
+        "title": "AI Commenter",
+        "icon": "$(comment-add)"
+    }]
+  },
+  "views": {
+    "ai-commenter-sidebar": [{
+        "type": "webview",
+        "id": "ai-commenter.personaView",
+        "name": "Gestisci Persona"
+    }]
+}
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -54,5 +68,8 @@
     "eslint": "^9.39.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0"
+  },
+  "dependencies": {
+    "@huggingface/inference": "^4.13.14"
   }
 }
