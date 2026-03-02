@@ -1,11 +1,8 @@
+/* eslint-disable curly */
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Persona } from './entities/persona';
-
-export interface PersonaDB {
-  [key: string]: Persona;
-}
+import { Persona, PersonaDB } from './entities/persona';
 
 export class DatabaseManager {
   private dbPath: string;
@@ -18,7 +15,7 @@ export class DatabaseManager {
     this.dbPath = path.join(storageUri.fsPath, 'persona.json');
   }
 
-  // Carica tutto il database — deserializza JSON → istanze Persona
+
   public load(): PersonaDB {
     if (!fs.existsSync(this.dbPath)) {
       const defaultDb: PersonaDB = {
@@ -30,7 +27,7 @@ export class DatabaseManager {
 
     const raw = JSON.parse(fs.readFileSync(this.dbPath, 'utf-8'));
 
-    // Converte ogni oggetto grezzo in un'istanza Persona
+
     const db: PersonaDB = {};
     for (const key in raw) {
       const p = raw[key];
@@ -39,30 +36,30 @@ export class DatabaseManager {
     return db;
   }
 
-  // Salva tutto il database — serializza istanze Persona → JSON
+
   public save(db: PersonaDB): void {
     const raw: Record<string, object> = {};
     for (const key in db) {
-      raw[key] = db[key].toJSON(); // usa toJSON() per serializzare
+      raw[key] = db[key].toJSON();
     }
     fs.writeFileSync(this.dbPath, JSON.stringify(raw, null, 4));
   }
 
-  // Aggiorna una singola persona aggiungendo un esempio
   public updatePersona(key: string, newExample: string): void {
     const db = this.load();
     if (db[key]) {
-      db[key].addEsempio(newExample);         // usa il metodo della classe
+      db[key].addEsempio(newExample);       
       if (db[key].esempi.length > 5) {
-        db[key].removeEsempio(0);             // rimuove il più vecchio
+        db[key].removeEsempio(0);            
       }
       this.save(db);
     }
   }
 
-  // Aggiunge un nuovo profilo
+
   public addPersona(key: string, persona: Persona): void {
     const db = this.load();
+    if (db[key]) throw new Error(`Persona con chiave '${key}' esiste già`);   
     db[key] = persona;
     this.save(db);
   }

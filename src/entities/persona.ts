@@ -1,4 +1,8 @@
 /* eslint-disable curly */
+export interface PersonaDB {
+  [key: string]: Persona;
+}
+
 export class Persona {
     private _nome: string;
     private _lingua: string;
