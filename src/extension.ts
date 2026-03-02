@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import * as vscode from 'vscode';
 import { HfInference } from '@huggingface/inference';
 import { DatabaseManager } from './db';

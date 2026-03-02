@@ -1,68 +1,69 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-
-export interface Persona {
-    nome: string;
-    lingua: string;
-    tono: string;
-    esempi: string[];
-}
+import { Persona } from './entities/persona';
 
 export interface PersonaDB {
-    [key: string]: Persona;
+  [key: string]: Persona;
 }
 
 export class DatabaseManager {
-    private dbPath: string;
+  private dbPath: string;
 
-    constructor(context: vscode.ExtensionContext) {
-        const storageUri = context.globalStorageUri;
-        // Crea la cartella di storage se non esiste
-        if (!fs.existsSync(storageUri.fsPath)) {
-            fs.mkdirSync(storageUri.fsPath, { recursive: true });
-        }
-        this.dbPath = path.join(storageUri.fsPath, 'persona.json');
+  constructor(context: vscode.ExtensionContext) {
+    const storageUri = context.globalStorageUri;
+    if (!fs.existsSync(storageUri.fsPath)) {
+      fs.mkdirSync(storageUri.fsPath, { recursive: true });
+    }
+    this.dbPath = path.join(storageUri.fsPath, 'persona.json');
+  }
+
+  // Carica tutto il database — deserializza JSON → istanze Persona
+  public load(): PersonaDB {
+    if (!fs.existsSync(this.dbPath)) {
+      const defaultDb: PersonaDB = {
+        default: new Persona('Dev Standard', 'Italiano', 'Conciso e tecnico', ['// Fix bug', '// Refactoring'])
+      };
+      this.save(defaultDb);
+      return defaultDb;
     }
 
-    // Carica tutto il database
-    public load(): PersonaDB {
-        if (!fs.existsSync(this.dbPath)) {
-            const defaultDb: PersonaDB = {
-                "default": {
-                    nome: "Dev Standard",
-                    lingua: "Italiano",
-                    tono: "Conciso e tecnico",
-                    esempi: ["// Fix bug", "// Refactoring"]
-                }
-            };
-            this.save(defaultDb);
-            return defaultDb;
-        }
-        return JSON.parse(fs.readFileSync(this.dbPath, 'utf-8'));
-    }
+    const raw = JSON.parse(fs.readFileSync(this.dbPath, 'utf-8'));
 
-    // Salva tutto il database
-    public save(db: PersonaDB): void {
-        fs.writeFileSync(this.dbPath, JSON.stringify(db, null, 4));
+    // Converte ogni oggetto grezzo in un'istanza Persona
+    const db: PersonaDB = {};
+    for (const key in raw) {
+      const p = raw[key];
+      db[key] = new Persona(p.nome, p.lingua, p.tono, p.esempi);
     }
+    return db;
+  }
 
-    // Aggiorna una singola persona (aggiungendo esempi)
-    public updatePersona(key: string, newExample: string): void {
-        const db = this.load();
-        if (db[key]) {
-            db[key].esempi.push(newExample);
-            if (db[key].esempi.length > 5) {
-                db[key].esempi.shift(); // Rimuove il più vecchio
-            }
-            this.save(db);
-        }
+  // Salva tutto il database — serializza istanze Persona → JSON
+  public save(db: PersonaDB): void {
+    const raw: Record<string, object> = {};
+    for (const key in db) {
+      raw[key] = db[key].toJSON(); // usa toJSON() per serializzare
     }
+    fs.writeFileSync(this.dbPath, JSON.stringify(raw, null, 4));
+  }
 
-    // Aggiunge un nuovo profilo vuoto
-    public addPersona(key: string, persona: Persona): void {
-        const db = this.load();
-        db[key] = persona;
-        this.save(db);
+  // Aggiorna una singola persona aggiungendo un esempio
+  public updatePersona(key: string, newExample: string): void {
+    const db = this.load();
+    if (db[key]) {
+      db[key].addEsempio(newExample);         // usa il metodo della classe
+      if (db[key].esempi.length > 5) {
+        db[key].removeEsempio(0);             // rimuove il più vecchio
+      }
+      this.save(db);
     }
+  }
+
+  // Aggiunge un nuovo profilo
+  public addPersona(key: string, persona: Persona): void {
+    const db = this.load();
+    db[key] = persona;
+    this.save(db);
+  }
 }
