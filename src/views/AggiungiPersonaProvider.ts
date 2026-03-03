@@ -2,12 +2,14 @@ import * as vscode from 'vscode';
 import { DatabaseManager } from '../db';
 import { Persona } from '../entities/persona';
 
-export class PersonaWebviewProvider implements vscode.WebviewViewProvider {
+export class AggiungiPersonaWebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai-commenter.personaView';
 
     constructor(private readonly dbManager: DatabaseManager) {}
 
     resolveWebviewView(webviewView: vscode.WebviewView) {
+
+
         webviewView.webview.options = { enableScripts: true };
         webviewView.webview.html = this.getHtml();
 
@@ -41,7 +43,7 @@ export class PersonaWebviewProvider implements vscode.WebviewViewProvider {
                     padding: 4px; box-sizing: border-box; }
                 label { font-size: 11px; display: block; margin-bottom: 2px; }
                 button { background: var(--vscode-button-background); color: var(--vscode-button-foreground);
-                    border: none; padding: 6px 12px; cursor: pointer; width: 100%; }
+                    border: 1px solid black; padding: 6px 12px; cursor: pointer; width: 100%; }
                 button:hover { background: var(--vscode-button-hoverBackground); }
                 .msg { margin-top: 8px; font-size: 12px; }
                 .ok { color: var(--vscode-terminal-ansiGreen); }
@@ -59,8 +61,9 @@ export class PersonaWebviewProvider implements vscode.WebviewViewProvider {
             <label>Tono</label>
             <input id="tono" placeholder="es. Ironico e diretto" />
             <label>Esempi (separati da virgola)</label>
-            <textarea id="esempi" rows="3" placeholder="es. // roba inutile, // già fatto mille volte"></textarea>
+            <textarea id="esempi" rows="3" placeholder="es. codice per stampare una stringa, codice per effettuare una somma"></textarea>
             <button onclick="submit()">Aggiungi Persona</button>
+            <br>
             <div id="msg" class="msg"></div>
             <script>
                 const vscode = acquireVsCodeApi();
@@ -73,6 +76,7 @@ export class PersonaWebviewProvider implements vscode.WebviewViewProvider {
                         esempi: document.getElementById('esempi').value,
                     }});
                 }
+
                 window.addEventListener('message', e => {
                     const msg = document.getElementById('msg');
                     if (e.data.command === 'success') {

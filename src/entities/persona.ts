@@ -10,6 +10,9 @@ export class Persona {
     private _esempi: string[];
 
     constructor(nome: string, lingua: string, tono: string, esempi: string[]) {
+        if(nome.length === 0 || lingua.length === 0 || tono.length === 0){
+            throw new Error("Uno o più campi sono vuoti");
+        }
         this._nome = nome;
         this._lingua = lingua;
         this._tono = tono;

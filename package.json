@@ -37,19 +37,25 @@
       ]
     },
     "viewsContainers": {
-    "activitybar": [{
-        "id": "ai-commenter-sidebar",
-        "title": "AI Commenter",
-        "icon": "$(comment-add)"
+      "activitybar": [{
+          "id": "ai-commenter-sidebar",
+          "title": "AI Commenter",
+          "icon": "$(comment-add)"
+      }]
+    },
+    "views": {
+      "ai-commenter-sidebar": [{
+          "type": "webview",
+          "id": "ai-commenter.personaView",
+          "name": "Gestisci Persona"
+      },
+    {
+      "type": "webview",
+      "id": "ai-commenter.userView",
+      "name": "Gestione Utenti"
     }]
-  },
-  "views": {
-    "ai-commenter-sidebar": [{
-        "type": "webview",
-        "id": "ai-commenter.personaView",
-        "name": "Gestisci Persona"
-    }]
-}
+      
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

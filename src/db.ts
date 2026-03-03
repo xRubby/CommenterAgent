@@ -21,7 +21,6 @@ export class DatabaseManager {
       const defaultDb: PersonaDB = {
         default: new Persona('Dev Standard', 'Italiano', 'Conciso e tecnico', ['// Fix bug', '// Refactoring'])
       };
-      this.save(defaultDb);
       return defaultDb;
     }
 
