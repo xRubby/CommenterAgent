@@ -18,6 +18,13 @@
         "title": "AI Commenter: Genera Commento"
       }
     ],
+    "keybindings": [
+      {
+        "command": "ai-commenter.acceptInline",
+        "key": "tab",
+        "when": "aiCommenter.suggestionVisible && editorTextFocus && !editorTabMovesFocus"
+      }
+    ],
     "configuration": {
       "title": "AI Commenter",
       "properties": {

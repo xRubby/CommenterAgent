@@ -5,6 +5,9 @@ import { AggiungiPersonaWebviewProvider } from './views/AggiungiPersonaProvider'
 import { GestioneUtentiWebviewProvider } from './views/GestioneUtentiProvider';
 import { editUserCommand } from './views/ModificaUtenteProvider';
 
+import { initInlineComments, registerInlineListeners, acceptInlineSuggestion, clearGhostText } from './commands/inlineComment';
+
+
 export function activate(context: vscode.ExtensionContext) {
     const dbManager = new DatabaseManager(context);
 
@@ -22,5 +25,14 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand('ai-commenter.editUser', editUserCommand(dbManager))
+    );
+
+    initInlineComments(context);
+    registerInlineListeners(context);
+    context.subscriptions.push(
+        vscode.commands.registerCommand('ai-commenter.acceptInline', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) await acceptInlineSuggestion(editor, context);
+        })
     );
 }
