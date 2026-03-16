@@ -18,19 +18,16 @@ export class DatabaseManager {
 
   public load(): PersonaDB {
     if (!fs.existsSync(this.dbPath)) {
-      const defaultDb: PersonaDB = {
-        default: new Persona('Dev Standard', 'Italiano', 'Conciso e tecnico', ['// Fix bug', '// Refactoring'])
-      };
-      return defaultDb;
+        return {
+            default: new Persona('Dev Standard', 'Italiano', 'Conciso e tecnico', ['// Fix bug', '// Refactoring'], true)
+        };
     }
 
     const raw = JSON.parse(fs.readFileSync(this.dbPath, 'utf-8'));
-
-
     const db: PersonaDB = {};
     for (const key in raw) {
-      const p = raw[key];
-      db[key] = new Persona(p.nome, p.lingua, p.tono, p.esempi);
+        const p = raw[key];
+        db[key] = new Persona(p.nome, p.lingua, p.tono, p.esempi, p.active ?? false);
     }
     return db;
   }
@@ -61,5 +58,24 @@ export class DatabaseManager {
     if (db[key]) throw new Error(`Persona con chiave '${key}' esiste già`);   
     db[key] = persona;
     this.save(db);
+  }
+
+  public setActivePersona(key: string): void {
+    const db = this.load();
+    if (!db[key]) throw new Error(`Persona '${key}' non trovata`);
+
+  
+    const current = Object.values(db).find(p => p.active);
+    if (current) current.active = false;
+
+    db[key].active = true;
+    this.save(db);
+  }
+
+  public getActivePersona(): { key: string; persona: Persona } | null {
+      const db = this.load();
+      const entry = Object.entries(db).find(([, p]) => p.active);
+      if (!entry) return null;
+      return { key: entry[0], persona: entry[1] };
   }
 }

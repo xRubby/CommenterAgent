@@ -8,8 +8,9 @@ export class Persona {
     private _lingua: string;
     private _tono: string;
     private _esempi: string[];
+    private _active: boolean;
 
-    constructor(nome: string, lingua: string, tono: string, esempi: string[]) {
+    constructor(nome: string, lingua: string, tono: string, esempi: string[], active: boolean = false) {
         if(nome.length === 0 || lingua.length === 0 || tono.length === 0){
             throw new Error("Uno o più campi sono vuoti");
         }
@@ -17,6 +18,7 @@ export class Persona {
         this._lingua = lingua;
         this._tono = tono;
         this._esempi = esempi;
+        this._active = active;
     }
 
     public get nome(): string {
@@ -60,12 +62,20 @@ export class Persona {
         this._esempi.splice(index, 1);
     }
 
+    public get active(): boolean {
+        return this._active;
+    }
+    public set active(value: boolean) {
+        this._active = value;
+    }
+
     public toJSON(): object {
         return {
             nome: this._nome,
             lingua: this._lingua,
             tono: this._tono,
             esempi: [...this._esempi],
+            active: this._active,
         };
     }
 }
