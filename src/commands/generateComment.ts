@@ -1,7 +1,7 @@
-/* eslint-disable curly */
 import * as vscode from 'vscode';
-import { HfInference } from '@huggingface/inference';
 import { DatabaseManager } from '../db';
+import { callAI } from '../providers/huggingface';
+import { getCommentPrefix } from '../providers/symbolDetector';
 
 export const generateComment = (dbManager: DatabaseManager) => async () => {
     const editor = vscode.window.activeTextEditor;
@@ -32,42 +32,19 @@ export const generateComment = (dbManager: DatabaseManager) => async () => {
     const selection = editor.selection;
     const selectedCode = editor.document.getText(selection);
     const languageId = editor.document.languageId;
+    const prefix = getCommentPrefix(languageId);
 
     if (!selectedCode) {
         vscode.window.showWarningMessage("Seleziona del codice da commentare.");
         return;
     }
 
-    const client = new HfInference(apiKey);
-
     try {
-        await vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-            title: `Generazione commento (${persona.nome})...`,
-            cancellable: false
-        }, async () => {
-
-            const systemPrompt = `Sei un clone di ${persona.nome}. 
-            Scrivi UN SOLO commento per il codice seguente.
-            Linguaggio: ${languageId}. Lingua: ${persona.lingua}. Tono: ${persona.tono}.
-            Esempi: ${persona.esempi.join(' | ')}.
-            REGOLE: Restituisci SOLO il testo del commento con il prefisso corretto (es. // o #).`;
-
-            const response = await client.chatCompletion({
-                model: "Qwen/Qwen2.5-Coder-7B-Instruct",
-                messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: `Codice:\n${selectedCode}` }
-                ],
-                max_tokens: 120,
-                temperature: 0.7
-            });
-
-            const comment = response.choices[0].message.content?.trim() || "";
+            const comment =  await callAI(selectedCode, languageId, persona);
 
             if (comment) {
                 await editor.edit(editBuilder => {
-                    editBuilder.insert(selection.start, comment + "\n");
+                    editBuilder.insert(selection.start, prefix + comment + "\n");
                 });
 
                 const feedback = await vscode.window.showInformationMessage(
@@ -90,7 +67,6 @@ export const generateComment = (dbManager: DatabaseManager) => async () => {
                     vscode.window.showInformationMessage("Stile aggiornato!");
                 }
             }
-        });
     } catch (error: any) {
         vscode.window.showErrorMessage("Errore Hugging Face: " + error.message);
     }

@@ -138,7 +138,6 @@ function extractByBraces(document: vscode.TextDocument, startLine: number): stri
     const lines: string[] = [];
     let depth = 0;
     let foundOpenBrace = false;
-    const MAX_LINES = 80;
 
     for (let i = startLine; i < document.lineCount && lines.length < MAX_LINES; i++) {
         const text = document.lineAt(i).text;

@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     initInlineComments(context);
-    registerInlineListeners(context);
+    registerInlineListeners(context, dbManager);
     context.subscriptions.push(
         vscode.commands.registerCommand('ai-commenter.acceptInline', async () => {
             const editor = vscode.window.activeTextEditor;

@@ -1,4 +1,3 @@
-/* eslint-disable curly */
 export interface PersonaDB {
   [key: string]: Persona;
 }
