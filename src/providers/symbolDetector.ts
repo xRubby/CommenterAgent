@@ -98,7 +98,7 @@ export function detectSymbolAtLine(
 
     for (const { regex, kind } of patterns) {
         const match = regex.exec(line);
-        if (!match) continue;
+        if (!match) {continue;}
 
         const name = [...match].reverse().find(g => g && /^\w+$/.test(g)) ?? 'unknown';
 
@@ -111,7 +111,7 @@ export function detectSymbolAtLine(
 }
 
 export function isAlreadyCommented(document: vscode.TextDocument, lineNumber: number): boolean {
-    if (lineNumber === 0) return false;
+    if (lineNumber === 0) {return false;}
     const prev = document.lineAt(lineNumber - 1).text.trim();
     return prev.startsWith('//') || prev.startsWith('*') || prev.startsWith('/*')
         || prev.startsWith('#') || prev.startsWith('"""');
@@ -148,7 +148,7 @@ function extractByBraces(document: vscode.TextDocument, startLine: number): stri
             if (char === '}') { depth--; }
         }
 
-        if (foundOpenBrace && depth === 0) break;
+        if (foundOpenBrace && depth === 0) {break;}
     }
 
     return lines.join('\n');
@@ -168,7 +168,7 @@ function extractByIndentation(document: vscode.TextDocument, startLine: number):
 
         if (!isEmpty) {
             const indent = text.match(/^(\s*)/)?.[1].length ?? 0;
-            if (indent <= baseIndent) break;
+            if (indent <= baseIndent) {break;}
         }
 
         lines.push(text);

@@ -60,7 +60,7 @@ export async function acceptInlineSuggestion(
     editor: vscode.TextEditor,
     context: vscode.ExtensionContext
 ) {
-    if (!currentSuggestion) return;
+    if (!currentSuggestion) {return;}
 
     const { line, comment } = currentSuggestion;
     const sourceLine = editor.document.lineAt(line);
@@ -86,11 +86,11 @@ export async function triggerInlineComment(
     const config = vscode.workspace.getConfiguration('aiCommenter');
     const apiKey: string = config.get('apiKey') ?? '';
 
-    if (!apiKey) return;
+    if (!apiKey) {return;}
 
     const symbol = detectSymbolAtLine(editor.document, lineNumber);
-    if (!symbol) return;
-    if (isAlreadyCommented(editor.document, lineNumber)) return;
+    if (!symbol) {return;}
+    if (isAlreadyCommented(editor.document, lineNumber)) {return;}
 
     try {
         const comment = await generateComment(symbol.snippet, editor.document.languageId, dbManager);
@@ -114,7 +114,7 @@ export function registerInlineListeners(context: vscode.ExtensionContext, dbMana
                 clearGhostText(editor);
             }
 
-            if (debounceTimer) clearTimeout(debounceTimer);
+            if (debounceTimer) {clearTimeout(debounceTimer);}
             debounceTimer = setTimeout(() => {
                 if (vscode.window.activeTextEditor === editor) {
                     triggerInlineComment(editor, context, currentLine, dbManager);
@@ -126,11 +126,11 @@ export function registerInlineListeners(context: vscode.ExtensionContext, dbMana
     context.subscriptions.push(
         vscode.workspace.onDidChangeTextDocument(e => {
             const editor = vscode.window.activeTextEditor;
-            if (!editor || e.document !== editor.document) return;
+            if (!editor || e.document !== editor.document) {return;}
 
             clearGhostText(editor);
 
-            if (debounceTimer) clearTimeout(debounceTimer);
+            if (debounceTimer) {clearTimeout(debounceTimer);}
             debounceTimer = setTimeout(() => {
                 const activeEditor = vscode.window.activeTextEditor;
                 if (activeEditor) {

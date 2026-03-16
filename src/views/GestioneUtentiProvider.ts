@@ -41,7 +41,7 @@ export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider
 
         const rows = Object.keys(db).map(key => {
             const u = db[key];
-            if (!u) return '';
+            if (!u) {return '';}
             const nome = u.nome || '';
             const safeKey = key.replace(/'/g, "\\'");
 

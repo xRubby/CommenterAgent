@@ -24,7 +24,7 @@ export class Persona {
         return this._nome;
     }
     public set nome(value: string) {
-        if (!value || value.trim() === '') throw new Error('Nome non può essere vuoto');
+        if (!value || value.trim() === '') {throw new Error('Nome non può essere vuoto');}
         this._nome = value.trim();
     }
 
@@ -32,7 +32,7 @@ export class Persona {
         return this._lingua;
     }
     public set lingua(value: string) {
-        if (!value || value.trim() === '') throw new Error('Lingua non può essere vuota');
+        if (!value || value.trim() === '') {throw new Error('Lingua non può essere vuota');}
         this._lingua = value.trim();
     }
 
@@ -40,7 +40,7 @@ export class Persona {
         return this._tono;
     }
     public set tono(value: string) {
-        if (!value || value.trim() === '') throw new Error('Tono non può essere vuoto');
+        if (!value || value.trim() === '') {throw new Error('Tono non può essere vuoto');}
         this._tono = value.trim();
     }
 
@@ -52,12 +52,12 @@ export class Persona {
     }
 
     public addEsempio(esempio: string): void {
-        if (esempio.trim() === '') throw new Error('Esempio non può essere vuoto');
+        if (esempio.trim() === '') {throw new Error('Esempio non può essere vuoto');}
         this._esempi.push(esempio.trim());
     }
 
     public removeEsempio(index: number): void {
-        if (index < 0 || index >= this._esempi.length) throw new Error('Indice non valido');
+        if (index < 0 || index >= this._esempi.length) {throw new Error('Indice non valido');}
         this._esempi.splice(index, 1);
     }
 

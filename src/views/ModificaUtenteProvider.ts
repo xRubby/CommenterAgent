@@ -6,7 +6,7 @@ export function editUserCommand(dbManager: DatabaseManager) {
     return (key: string) => {
         const db = dbManager.load();
         const user = db[key];
-        if (!user) return;
+        if (!user) {return;}
 
         const panel = vscode.window.createWebviewPanel(
             'editUser',

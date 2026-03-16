@@ -54,18 +54,18 @@ export class DatabaseManager {
 
   public addPersona(key: string, persona: Persona): void {
     const db = this.load();
-    if (db[key]) throw new Error(`Persona con chiave '${key}' esiste già`);   
+    if (db[key]) {throw new Error(`Persona con chiave '${key}' esiste già`);}   
     db[key] = persona;
     this.save(db);
   }
 
   public setActivePersona(key: string): void {
     const db = this.load();
-    if (!db[key]) throw new Error(`Persona '${key}' non trovata`);
+    if (!db[key]) {throw new Error(`Persona '${key}' non trovata`);}
 
   
     const current = Object.values(db).find(p => p.active);
-    if (current) current.active = false;
+    if (current) {current.active = false;}
 
     db[key].active = true;
     this.save(db);
@@ -74,7 +74,7 @@ export class DatabaseManager {
   public getActivePersona(): { key: string; persona: Persona } | null {
       const db = this.load();
       const entry = Object.entries(db).find(([, p]) => p.active);
-      if (!entry) return null;
+      if (!entry) {return null;}
       return { key: entry[0], persona: entry[1] };
   }
 }

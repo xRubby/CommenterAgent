@@ -5,7 +5,7 @@ import { getCommentPrefix } from '../providers/symbolDetector';
 
 export const generateComment = (dbManager: DatabaseManager) => async () => {
     const editor = vscode.window.activeTextEditor;
-    if (!editor) return;
+    if (!editor) {return;}
 
     const config = vscode.workspace.getConfiguration('aiCommenter');
     const apiKey = config.get<string>('apiKey');
@@ -26,7 +26,7 @@ export const generateComment = (dbManager: DatabaseManager) => async () => {
     const selectedKey = await vscode.window.showQuickPick(Object.keys(db), {
         placeHolder: 'Chi deve commentare questo codice?'
     });
-    if (!selectedKey) return;
+    if (!selectedKey) {return;}
 
     const persona = db[selectedKey];
     const selection = editor.selection;
