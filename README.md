@@ -1,4 +1,4 @@
 # CommenterAgent
 
-Estensione per VSCode per generare dei commenti per il proprio codice!
+Estensione per VSCode che permette di creare dei commenti basandosi sulla personalità dell'utente
 
