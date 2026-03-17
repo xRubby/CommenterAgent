@@ -1,24 +1,4 @@
-# Mia Estensione
+# CommenterAgent
 
-Descrizione breve di cosa fa l'estensione.
+Estensione per VSCode per generare dei commenti per il proprio codice!
 
-## Features
-
-- Fa X
-- Fa Y
-
-## Usage
-
-Spiega come usarla.
-
-## Requirements
-
-Eventuali dipendenze.
-
-## Extension Settings
-
-Se hai configurazioni.
-
-## License
-
-MIT
