@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { callAI } from '../providers/huggingface';
+import { callAI, getApiKey } from '../providers/huggingface';
 import { detectSymbolAtLine, isAlreadyCommented, getCommentPrefix } from '../providers/symbolDetector';
 import { DatabaseManager } from '../db';
 
@@ -85,8 +85,7 @@ export async function triggerInlineComment(
     lineNumber: number,
     dbManager: DatabaseManager
 ) {
-    const config = vscode.workspace.getConfiguration('aiCommenter');
-    const apiKey: string = config.get('apiKey') ?? '';
+    const apiKey = await getApiKey();
 
     if (!apiKey) {return;}
 

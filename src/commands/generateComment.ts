@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { DatabaseManager } from '../db';
-import { callAI } from '../providers/huggingface';
+import { callAI, getApiKey } from '../providers/huggingface';
 import { getCommentPrefix } from '../providers/symbolDetector';
 
 // Genera un commento AI basato sul codice selezionato.
@@ -8,19 +8,8 @@ export const generateComment = (dbManager: DatabaseManager) => async () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {return;}
 
-    const config = vscode.workspace.getConfiguration('aiCommenter');
-    const apiKey = config.get<string>('apiKey');
-
-    if (!apiKey) {
-        const selection = await vscode.window.showErrorMessage(
-            "Hugging Face API Key mancante!",
-            "Apri Impostazioni"
-        );
-        if (selection === "Apri Impostazioni") {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'aiCommenter.apiKey');
-        }
-        return;
-    }
+    const apiKey = await getApiKey();
+    if (!apiKey) {return;}
 
     const db = dbManager.load();
 

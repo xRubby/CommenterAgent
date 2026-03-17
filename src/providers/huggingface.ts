@@ -8,16 +8,7 @@ const MODEL = 'Qwen/Qwen2.5-Coder-7B-Instruct';
 
 // Chiamata all'API AI per generare un commento inline per il codice fornito. Restituisce una stringa con il commento generato.
 export async function callAI(code: string, langId: string, persona: Persona): Promise<string> {
-    const config = vscode.workspace.getConfiguration('aiCommenter');
-    const apiKey = config.get<string>('apiKey');
-
-    if (!apiKey) {
-        const selection = await vscode.window.showErrorMessage('Hugging Face API Key mancante!', 'Apri Impostazioni');
-        if (selection === 'Apri Impostazioni') {
-            vscode.commands.executeCommand('workbench.action.openSettings');
-        }
-        return '';
-    }
+    const apiKey = await getApiKey();
 
     const client = new HfInference(apiKey);
 
@@ -61,4 +52,21 @@ export async function callAI(code: string, langId: string, persona: Persona): Pr
         vscode.window.showErrorMessage('Errore Hugging Face: ' + error.message);
         return '';
     }
+}
+
+export async function getApiKey(){
+    const config = vscode.workspace.getConfiguration('aiCommenter');
+    const apiKey = config.get<string>('apiKey');
+        
+    if (!apiKey) {
+        const selection = await vscode.window.showErrorMessage(
+            "Hugging Face API Key mancante!",
+            "Apri Impostazioni"
+        );
+        if (selection === "Apri Impostazioni") {
+            vscode.commands.executeCommand('workbench.action.openSettings', 'aiCommenter.apiKey');
+        }
+        return;
+    }
+    return apiKey;
 }
