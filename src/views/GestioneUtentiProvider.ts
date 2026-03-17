@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
 import { DatabaseManager } from '../db';
 
+// Classe che gestisce la visualizzazione degli utenti in un Webview.
 export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai-commenter.userView';
 
     constructor(private readonly dbManager: DatabaseManager) {}
 
+    // Configura e gestisce i messaggi ricevuti dalla WebView, eseguendo azioni come la cancellazione dell'utente, 
+    // l'editing e l'attivazione della persona selezionata.
     resolveWebviewView(webviewView: vscode.WebviewView) {
         webviewView.webview.options = { enableScripts: true };
         webviewView.webview.html = this.getHtml();
@@ -36,6 +39,7 @@ export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider
         });
     }
 
+    // Genera una tabella HTML con informazioni sugli utenti e bottoni per modifiche.
     private getHtml(): string {
         const db = this.dbManager.load();
 
@@ -104,6 +108,7 @@ export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider
         </html>`;
     }
 
+    // Mostra la sidebar dell'estensione AI Commenter in Visual Studio Code.
     public static show() {
         vscode.commands.executeCommand('workbench.view.extension.ai-commenter-sidebar');
     }

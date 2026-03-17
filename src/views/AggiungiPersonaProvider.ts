@@ -2,11 +2,15 @@ import * as vscode from 'vscode';
 import { DatabaseManager } from '../db';
 import { Persona } from '../entities/persona';
 
+// Classe che gestisce la visualizzazione Webview per l'aggiunta di persone.
 export class AggiungiPersonaWebviewProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'ai-commenter.personaView';
 
     constructor(private readonly dbManager: DatabaseManager) {}
 
+    // Configura le opzioni del Webview per abilitare gli script e carica il contenuto HTML.
+    // Gestisce i messaggi ricevuti dallo script del Webview per aggiungere una nuova persona al database 
+    // e invia un messaggio di successo o errore in risposta.
     resolveWebviewView(webviewView: vscode.WebviewView) {
 
 
@@ -29,6 +33,7 @@ export class AggiungiPersonaWebviewProvider implements vscode.WebviewViewProvide
         });
     }
 
+    // Genera l'HTML per la finestra di dialogo di aggiunta di una nuova persona.
     private getHtml(): string {
         return `<!DOCTYPE html>
         <html lang="it">

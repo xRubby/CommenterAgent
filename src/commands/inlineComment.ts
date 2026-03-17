@@ -3,17 +3,17 @@ import { callAI } from '../providers/huggingface';
 import { detectSymbolAtLine, isAlreadyCommented, getCommentPrefix } from '../providers/symbolDetector';
 import { DatabaseManager } from '../db';
 
-const MODEL = 'Qwen/Qwen2.5-Coder-7B-Instruct';
-
 let ghostDecoration: vscode.TextEditorDecorationType;
 let currentSuggestion: { line: number; comment: string } | null = null;
 let debounceTimer: NodeJS.Timeout | undefined;
 
-export function initInlineComments(context: vscode.ExtensionContext) {
+// Inizializza i commenti inline per l'estensione VSCode.
+export function initInlineComments(context: vscode.ExtensionContext) { 
     ghostDecoration = vscode.window.createTextEditorDecorationType({});
     context.subscriptions.push({ dispose: () => ghostDecoration.dispose() });
 }
 
+// Genera un commento per il codice fornito.
 async function generateComment(snippet: string, langId: string, dbManager: DatabaseManager): Promise<string> {
 
     const active = dbManager.getActivePersona();
@@ -26,9 +26,9 @@ async function generateComment(snippet: string, langId: string, dbManager: Datab
     return callAI(snippet, langId, active.persona) ?? '';
 }
 
-function showGhostText(
+// Mostra testo fantasma nell'editor per una linea specifica.
+function showGhostText( 
     editor: vscode.TextEditor,
-    context: vscode.ExtensionContext,
     lineNumber: number,
     commentText: string
 ) {
@@ -50,12 +50,14 @@ function showGhostText(
     vscode.commands.executeCommand('setContext', 'aiCommenter.suggestionVisible', true);
 }
 
+// Cancella il testo fantasma nell'editor se presente e nasconde il contesto del sugggerimento AI.
 export function clearGhostText(editor?: vscode.TextEditor) {
     editor?.setDecorations(ghostDecoration, []);
     currentSuggestion = null;
     vscode.commands.executeCommand('setContext', 'aiCommenter.suggestionVisible', false);
 }
 
+// Accetta un suggerimento inline nel codice e l'inserisce nella riga corretta con l'indentazione appropriata.
 export async function acceptInlineSuggestion(
     editor: vscode.TextEditor,
     context: vscode.ExtensionContext
@@ -77,9 +79,9 @@ export async function acceptInlineSuggestion(
     clearGhostText(editor);
 }
 
-export async function triggerInlineComment(
+// Attiva un commento AI all'interno del codice.
+export async function triggerInlineComment( 
     editor: vscode.TextEditor,
-    context: vscode.ExtensionContext,
     lineNumber: number,
     dbManager: DatabaseManager
 ) {
@@ -96,13 +98,14 @@ export async function triggerInlineComment(
         const comment = await generateComment(symbol.snippet, editor.document.languageId, dbManager);
         if (comment && vscode.window.activeTextEditor === editor) {
             console.log("Commento generato");
-            showGhostText(editor, context, lineNumber, comment);
+            showGhostText(editor, lineNumber, comment);
         }
     } catch (err: any) {
         console.error('AI Commenter inline error:', err.message);
     }
 }
 
+// Registra listener inline per gestire selezioni e modifiche del documento.
 export function registerInlineListeners(context: vscode.ExtensionContext, dbManager: DatabaseManager) {
 
     context.subscriptions.push(
@@ -117,7 +120,7 @@ export function registerInlineListeners(context: vscode.ExtensionContext, dbMana
             if (debounceTimer) {clearTimeout(debounceTimer);}
             debounceTimer = setTimeout(() => {
                 if (vscode.window.activeTextEditor === editor) {
-                    triggerInlineComment(editor, context, currentLine, dbManager);
+                    triggerInlineComment(editor, currentLine, dbManager);
                 }
             }, 800);
         })
@@ -135,7 +138,7 @@ export function registerInlineListeners(context: vscode.ExtensionContext, dbMana
                 const activeEditor = vscode.window.activeTextEditor;
                 if (activeEditor) {
                     const line = activeEditor.selection.active.line;
-                    triggerInlineComment(activeEditor, context, line, dbManager);
+                    triggerInlineComment(activeEditor, line, dbManager);
                 }
             }, 800);
         })

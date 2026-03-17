@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { DatabaseManager } from '../db';
 import { Persona } from '../entities/persona';
 
+// Crea un comando per modificare gli utenti nel database.
 export function editUserCommand(dbManager: DatabaseManager) {
     return (key: string) => {
         const db = dbManager.load();
@@ -31,6 +32,7 @@ export function editUserCommand(dbManager: DatabaseManager) {
     };
 }
 
+// Genera l'HTML per modificare un utente con i dati forniti.
 function getEditUserHtml(key: string, user: Persona): string {
     return `<!DOCTYPE html>
     <html lang="it">

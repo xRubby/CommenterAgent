@@ -46,24 +46,27 @@
       ]
     },
     "viewsContainers": {
-      "activitybar": [{
+      "activitybar": [
+        {
           "id": "ai-commenter-sidebar",
           "title": "AI Commenter",
           "icon": "$(comment-add)"
-      }]
+        }
+      ]
     },
     "views": {
-      "ai-commenter-sidebar": [{
+      "ai-commenter-sidebar": [
+        {
           "type": "webview",
           "id": "ai-commenter.personaView",
           "name": "Gestisci Persona"
-      },
-    {
-      "type": "webview",
-      "id": "ai-commenter.userView",
-      "name": "Gestione Utenti"
-    }]
-      
+        },
+        {
+          "type": "webview",
+          "id": "ai-commenter.userView",
+          "name": "Gestione Utenti"
+        }
+      ]
     }
   },
   "scripts": {
@@ -76,7 +79,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.19.13",
+    "@types/node": "^22.19.15",
     "@types/vscode": "^1.109.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",

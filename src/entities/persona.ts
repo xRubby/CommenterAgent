@@ -2,6 +2,7 @@ export interface PersonaDB {
   [key: string]: Persona;
 }
 
+// Classe che rappresenta una persona con proprietà personalizzabili e metodi per gestire gli esempi e lo stato attivo.
 export class Persona {
     private _nome: string;
     private _lingua: string;
@@ -23,6 +24,7 @@ export class Persona {
     public get nome(): string {
         return this._nome;
     }
+
     public set nome(value: string) {
         if (!value || value.trim() === '') {throw new Error('Nome non può essere vuoto');}
         this._nome = value.trim();
@@ -39,6 +41,7 @@ export class Persona {
     public get tono(): string {
         return this._tono;
     }
+
     public set tono(value: string) {
         if (!value || value.trim() === '') {throw new Error('Tono non può essere vuoto');}
         this._tono = value.trim();
@@ -47,6 +50,7 @@ export class Persona {
     public get esempi(): string[] {
         return [...this._esempi];
     }
+
     public set esempi(value: string[]) {
         this._esempi = [...value];
     }
@@ -64,6 +68,7 @@ export class Persona {
     public get active(): boolean {
         return this._active;
     }
+    
     public set active(value: boolean) {
         this._active = value;
     }

@@ -3,7 +3,8 @@ import { DatabaseManager } from '../db';
 import { callAI } from '../providers/huggingface';
 import { getCommentPrefix } from '../providers/symbolDetector';
 
-export const generateComment = (dbManager: DatabaseManager) => async () => {
+// Genera un commento AI basato sul codice selezionato.
+export const generateComment = (dbManager: DatabaseManager) => async () => { 
     const editor = vscode.window.activeTextEditor;
     if (!editor) {return;}
 

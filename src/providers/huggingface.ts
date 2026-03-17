@@ -6,6 +6,7 @@ const MODEL = 'Qwen/Qwen2.5-Coder-7B-Instruct';
 
 
 
+// Chiamata all'API AI per generare un commento inline per il codice fornito. Restituisce una stringa con il commento generato.
 export async function callAI(code: string, langId: string, persona: Persona): Promise<string> {
     const config = vscode.workspace.getConfiguration('aiCommenter');
     const apiKey = config.get<string>('apiKey');
@@ -27,7 +28,10 @@ export async function callAI(code: string, langId: string, persona: Persona): Pr
                 {
                     role: 'system',
                     content: `You are a code documentation expert named ${persona.nome}.
-                    Language to use for comments: ${persona.lingua}.
+                    CRITICAL RULE: You MUST write ALL comments exclusively in ${persona.lingua}. 
+                    Never use English. Every single word must be in ${persona.lingua}.
+
+                    Language: ${persona.lingua} (MANDATORY - no exceptions)
                     Tone: ${persona.tono}.
                     Examples of desired style: ${persona.esempi.join(' | ')}.
                     
@@ -36,13 +40,14 @@ export async function callAI(code: string, langId: string, persona: Persona): Pr
                     - Output ONLY the comment text, nothing else
                     - No code, no markdown, no comment symbols (// or #)
                     - Max 120 characters
+                    - Language MUST be ${persona.lingua} — this is non-negotiable
                     - Present tense: "Calculates...", "Returns...", "Handles..."
                     - For functions/methods: what it does and returns
                     - For classes: its purpose`
                 },
                 {
                     role: 'user',
-                    content: `Generate a single inline comment for this ${langId} code:\n\n${code}\n\nReply with ONLY the comment text.`
+                    content: `Generate a single inline comment in ${persona.lingua} for this ${langId} code:\n\n${code}\n\nReply with ONLY the comment text in ${persona.lingua}.`
                 }
             ],
             max_tokens: 80,

@@ -8,7 +8,8 @@ import { editUserCommand } from './views/ModificaUtenteProvider';
 import { initInlineComments, registerInlineListeners, acceptInlineSuggestion, clearGhostText } from './commands/inlineComment';
 
 
-export function activate(context: vscode.ExtensionContext) {
+// Attiva l'estensione e registra i comandi e le visualizzazioni web.
+export function activate(context: vscode.ExtensionContext) { 
     const dbManager = new DatabaseManager(context);
 
     context.subscriptions.push(

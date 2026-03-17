@@ -7,6 +7,7 @@ export interface DetectedSymbol {
     snippet: string;
 }
 
+// Definisce i pattern per rilevare classi, metodi e funzioni in vari linguaggi di programmazione.
 const PATTERNS: Record<string, { regex: RegExp; kind: DetectedSymbol['kind'] }[]> = {
     typescript: [
         { regex: /^\s*(export\s+)?(default\s+)?class\s+(\w+)/, kind: 'class' },
@@ -89,6 +90,8 @@ const PATTERNS: Record<string, { regex: RegExp; kind: DetectedSymbol['kind'] }[]
 
 const FALLBACK = PATTERNS['c'];
 
+// Determina il simbolo nella linea specificata del documento e 
+// restituisce un oggetto DetectedSymbol o null se non viene trovato alcun simbolo.
 export function detectSymbolAtLine(
     document: vscode.TextDocument,
     lineNumber: number
@@ -110,6 +113,7 @@ export function detectSymbolAtLine(
     return null;
 }
 
+// Determina se una linea è già commentata. Restituisce `true` se la linea precedente inizia con un commento.
 export function isAlreadyCommented(document: vscode.TextDocument, lineNumber: number): boolean {
     if (lineNumber === 0) {return false;}
     const prev = document.lineAt(lineNumber - 1).text.trim();
@@ -117,11 +121,13 @@ export function isAlreadyCommented(document: vscode.TextDocument, lineNumber: nu
         || prev.startsWith('#') || prev.startsWith('"""');
 }
 
+// Determina il prefisso del commento in base all'ID del linguaggio.
 export function getCommentPrefix(languageId: string): string {
     const hashLangs = ['python', 'ruby', 'bash', 'shellscript', 'r'];
     return hashLangs.includes(languageId) ? '# ' : '// ';
 }
 
+// Estrae un blocco completo di codice dal documento in base al linguaggio e alla riga di partenza.
 function extractFullBlock(document: vscode.TextDocument, startLine: number): string {
     const langId = document.languageId;
 
@@ -134,6 +140,7 @@ function extractFullBlock(document: vscode.TextDocument, startLine: number): str
 
 const MAX_LINES = 160;
 
+// Estrae il testo tra parentesi graffe a partire dalla linea specificata. Restituisce il contenuto estratto come una stringa.
 function extractByBraces(document: vscode.TextDocument, startLine: number): string {
     const lines: string[] = [];
     let depth = 0;
@@ -156,6 +163,9 @@ function extractByBraces(document: vscode.TextDocument, startLine: number): stri
 
 
 
+// Estrae le righe di un documento partendo dalla linea specificata fino alla fine 
+// o al raggiungimento del numero massimo di linee, mantenendo solo quelle con 
+// indentation maggiore della linea di partenza. Restituisce una stringa con tutte le righe concatenate.
 function extractByIndentation(document: vscode.TextDocument, startLine: number): string {
     const lines: string[] = [];
 
