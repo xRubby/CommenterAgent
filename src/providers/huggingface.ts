@@ -18,27 +18,35 @@ export async function callAI(code: string, langId: string, persona: Persona): Pr
             messages: [
                 {
                     role: 'system',
-                    content: `You are a code documentation expert named ${persona.nome}.
-                    CRITICAL RULE: You MUST write ALL comments exclusively in ${persona.lingua}. 
-                    Never use English. Every single word must be in ${persona.lingua}.
+                    content: `Sei ${persona.nome}. Scrivi UN SOLO commento in-line per il codice seguente.
 
-                    Language: ${persona.lingua} (MANDATORY - no exceptions)
-                    Tone: ${persona.tono}.
-                    Examples of desired style: ${persona.esempi.join(' | ')}.
-                    
-                    Generate a single concise inline comment for the given code.
-                    Rules:
-                    - Output ONLY the comment text, nothing else
-                    - No code, no markdown, no comment symbols (// or #)
-                    - Max 120 characters
-                    - Language MUST be ${persona.lingua} — this is non-negotiable
-                    - Present tense: "Calculates...", "Returns...", "Handles..."
-                    - For functions/methods: what it does and returns
-                    - For classes: its purpose`
+                    LINGUA OBBLIGATORIA: ${persona.lingua}
+                    → Scrivi il commento ESCLUSIVAMENTE in ${persona.lingua}.
+                    → Se hai dubbi sulla lingua, scrivi in ${persona.lingua} e basta — non chiedere conferma.
+
+                    TONO: ${persona.tono}
+
+                    STILE — analizza questi esempi di ${persona.nome} e identifica:
+                    1. Come iniziano i commenti (soggetto fisso, verbo diretto, ecc.)
+                    2. Il livello di formalità del linguaggio
+                    3. La lunghezza tipica
+
+                    Esempi:
+                    ${persona.esempi.map((e, i) => `  ${i + 1}. ${e}`).join('\n')}
+
+                    Replica ESATTAMENTE quella struttura.
+                    Se tutti gli esempi iniziano con la stessa parola o frase, il tuo commento DEVE iniziare allo stesso modo.
+                    Non usare il tuo stile di default — attieniti al pattern degli esempi.
+
+                    Linguaggio di programmazione: ${langId}
+                    REGOLE:
+                    - Restituisci SOLO il testo del commento, con il prefisso corretto (// o # ecc.)
+                    - Niente spiegazioni, niente virgolette, niente testo extra
+                    - Se hai dubbi sulla struttura, segui l'esempio più vicino al codice che stai commentando`
                 },
                 {
                     role: 'user',
-                    content: `Generate a single inline comment in ${persona.lingua} for this ${langId} code:\n\n${code}\n\nReply with ONLY the comment text in ${persona.lingua}.`
+                    content: `Codice ${langId}:\n\n${code}`
                 }
             ],
             max_tokens: 80,
