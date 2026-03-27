@@ -50,7 +50,7 @@ export class DatabaseManager {
     if (db[key]) {
       db[key].addEsempio(newExample);       
       if (db[key].esempi.length > 5) {
-        db[key].removeEsempio(0);            
+        db[key].removeEsempio(2);            
       }
       this.save(db);
     }

@@ -60,7 +60,7 @@ export function clearGhostText(editor?: vscode.TextEditor) {
 // Accetta un suggerimento inline nel codice e l'inserisce nella riga corretta con l'indentazione appropriata.
 export async function acceptInlineSuggestion(
     editor: vscode.TextEditor,
-    context: vscode.ExtensionContext
+    dbManager: DatabaseManager
 ) {
     if (!currentSuggestion) {return;}
 
@@ -76,6 +76,11 @@ export async function acceptInlineSuggestion(
         );
     });
 
+    const active = dbManager.getActivePersona();
+
+    if(active){
+        dbManager.updatePersona(active.key, comment);
+    }
     clearGhostText(editor);
 }
 
