@@ -44,7 +44,7 @@ export class DatabaseManager {
     fs.writeFileSync(this.dbPath, JSON.stringify(raw, null, 4));
   }
 
-  // Aggiorna l'esempio per una persona specificata, rimuovendo quello più vecchio se ne sono più di 5.
+  // Verifica se la persona esiste nel database e aggiorna i suoi dati se necessario.
   public updatePersona(key: string, newExample: string): void {
     const db = this.load();
     if (db[key]) {

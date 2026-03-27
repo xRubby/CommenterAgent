@@ -57,7 +57,11 @@ export function clearGhostText(editor?: vscode.TextEditor) {
     vscode.commands.executeCommand('setContext', 'aiCommenter.suggestionVisible', false);
 }
 
-// Accetta un suggerimento inline nel codice e l'inserisce nella riga corretta con l'indentazione appropriata.
+
+// Questa funzione accetta una suggistione inline e la aggiunge alla riga specificata nell'editor, 
+// mantenendo l'indentazione e il prefisso appropriati. 
+// Aggiorna anche la persona attiva nel database se presente. 
+// Infine, pulisce qualsiasi testo fantasma dall'editor.
 export async function acceptInlineSuggestion(
     editor: vscode.TextEditor,
     dbManager: DatabaseManager
