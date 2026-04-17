@@ -4,7 +4,7 @@ import { Persona } from '../entities/persona';
 
 // Classe che gestisce la visualizzazione Webview per l'aggiunta di persone.
 export class AggiungiPersonaWebviewProvider implements vscode.WebviewViewProvider {
-    public static readonly viewType = 'ai-commenter.personaView';
+    public static readonly viewType = 'scribe.personaView';
 
     constructor(private readonly dbManager: DatabaseManager) {}
 

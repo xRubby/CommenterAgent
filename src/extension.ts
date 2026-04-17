@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     const dbManager = new DatabaseManager(context);
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('ai-commenter.generate', generateComment(dbManager))
+        vscode.commands.registerCommand('scribe.generate', generateComment(dbManager))
     );
 
     context.subscriptions.push(
@@ -25,13 +25,13 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('ai-commenter.editUser', editUserCommand(dbManager))
+        vscode.commands.registerCommand('scribe.editUser', editUserCommand(dbManager))
     );
 
     initInlineComments(context);
     registerInlineListeners(context, dbManager);
     context.subscriptions.push(
-        vscode.commands.registerCommand('ai-commenter.acceptInline', async () => {
+        vscode.commands.registerCommand('scribe.acceptInline', async () => {
             const editor = vscode.window.activeTextEditor;
             if (editor) {await acceptInlineSuggestion(editor, dbManager);}
         })

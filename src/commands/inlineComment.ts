@@ -47,14 +47,14 @@ function showGhostText(
     }]);
 
     currentSuggestion = { line: lineNumber, comment: commentText };
-    vscode.commands.executeCommand('setContext', 'aiCommenter.suggestionVisible', true);
+    vscode.commands.executeCommand('setContext', 'scribe.suggestionVisible', true);
 }
 
 // Cancella il testo fantasma nell'editor se presente e nasconde il contesto del sugggerimento AI.
 export function clearGhostText(editor?: vscode.TextEditor) {
     editor?.setDecorations(ghostDecoration, []);
     currentSuggestion = null;
-    vscode.commands.executeCommand('setContext', 'aiCommenter.suggestionVisible', false);
+    vscode.commands.executeCommand('setContext', 'scribe.suggestionVisible', false);
 }
 
 
@@ -109,7 +109,7 @@ export async function triggerInlineComment(
             showGhostText(editor, lineNumber, comment);
         }
     } catch (err: any) {
-        console.error('AI Commenter inline error:', err.message);
+        console.error('Scribe inline error:', err.message);
     }
 }
 

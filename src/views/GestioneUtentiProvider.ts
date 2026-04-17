@@ -3,7 +3,7 @@ import { DatabaseManager } from '../db';
 
 // Classe che gestisce la visualizzazione degli utenti in un Webview.
 export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider {
-    public static readonly viewType = 'ai-commenter.userView';
+    public static readonly viewType = 'scribe.userView';
 
     constructor(private readonly dbManager: DatabaseManager) {}
 
@@ -29,7 +29,7 @@ export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider
                     vscode.window.showInformationMessage(`Utente "${key}" cancellato.`);
                 }
             } else if (msg.command === 'editUser') {
-                vscode.commands.executeCommand('ai-commenter.editUser', msg.key);
+                vscode.commands.executeCommand('scribe.editUser', msg.key);
             } else if (msg.command === 'setActive') {
                 this.dbManager.setActivePersona(msg.key);
                 webviewView.webview.html = this.getHtml();
@@ -110,6 +110,6 @@ export class GestioneUtentiWebviewProvider implements vscode.WebviewViewProvider
 
     // Mostra la sidebar dell'estensione AI Commenter in Visual Studio Code.
     public static show() {
-        vscode.commands.executeCommand('workbench.view.extension.ai-commenter-sidebar');
+        vscode.commands.executeCommand('workbench.view.extension.scribe-sidebar');
     }
 }

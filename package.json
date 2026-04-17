@@ -1,6 +1,6 @@
 {
-  "name": "agentcommentgenerator",
-  "displayName": "AgentCommentGenerator",
+  "name": "Scribe",
+  "displayName": "Scribe",
   "description": "Permette di creare dei commenti basandosi sulla personalità dell'utente",
   "version": "0.0.1",
   "engines": {
@@ -16,21 +16,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "ai-commenter.generate",
-        "title": "AI Commenter: Genera Commento"
+        "command": "scribe.generate",
+        "title": "Scribe: Genera Commento"
       }
     ],
     "keybindings": [
       {
-        "command": "ai-commenter.acceptInline",
+        "command": "scribe.acceptInline",
         "key": "tab",
-        "when": "aiCommenter.suggestionVisible && editorTextFocus && !editorTabMovesFocus"
+        "when": "scribe.suggestionVisible && editorTextFocus && !editorTabMovesFocus"
       }
     ],
     "configuration": {
-      "title": "AI Commenter",
+      "title": "Scribe",
       "properties": {
-        "aiCommenter.apiKey": {
+        "scribe.apiKey": {
           "type": "string",
           "default": "",
           "description": "Inserisci la tua Hugging Face API Key"
@@ -40,7 +40,7 @@
     "menus": {
       "editor/context": [
         {
-          "command": "ai-commenter.generate",
+          "command": "scribe.generate",
           "group": "navigation"
         }
       ]
@@ -48,22 +48,22 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "ai-commenter-sidebar",
-          "title": "AI Commenter",
+          "id": "scribe-sidebar",
+          "title": "Scribe",
           "icon": "$(comment-add)"
         }
       ]
     },
     "views": {
-      "ai-commenter-sidebar": [
+      "scribe-sidebar": [
         {
           "type": "webview",
-          "id": "ai-commenter.personaView",
+          "id": "scribe.personaView",
           "name": "Gestisci Persona"
         },
         {
           "type": "webview",
-          "id": "ai-commenter.userView",
+          "id": "scribe.userView",
           "name": "Gestione Utenti"
         }
       ]

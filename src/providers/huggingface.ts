@@ -63,7 +63,7 @@ export async function callAI(code: string, langId: string, persona: Persona): Pr
 }
 
 export async function getApiKey(){
-    const config = vscode.workspace.getConfiguration('aiCommenter');
+    const config = vscode.workspace.getConfiguration('scribe');
     const apiKey = config.get<string>('apiKey');
         
     if (!apiKey) {
@@ -72,7 +72,7 @@ export async function getApiKey(){
             "Apri Impostazioni"
         );
         if (selection === "Apri Impostazioni") {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'aiCommenter.apiKey');
+            vscode.commands.executeCommand('workbench.action.openSettings', 'scribe.apiKey');
         }
         return;
     }
